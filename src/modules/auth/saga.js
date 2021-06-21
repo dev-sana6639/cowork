@@ -48,6 +48,11 @@ function* setanonymousSaga(){
         type: Actions.SETANONYMOUS_COMPLETE
     })
 }
+function* setAnonymousfalseSaga(){
+    yield put({
+        type: Actions.SETANONYMOUSFALSE_COMPLETE
+    })
+}
 export default function* authSaga() {
     console.log('came to authsaga')
     
@@ -56,4 +61,5 @@ export default function* authSaga() {
   yield takeEvery(Actions.SIGN_OUT,signoutSaga)
   yield takeEvery(Actions.SIGNUP_START,signupSaga)
   yield takeEvery(Actions.SETANONYMOUS_START,setanonymousSaga)
+  yield takeEvery(Actions.SETANONYMOUSFALSE_START,setAnonymousfalseSaga)
 }

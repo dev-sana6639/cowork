@@ -10,7 +10,7 @@ import Header from '../../components/Header/Header';
 import NavigationService from '../../utils/navigation'
 import { authStack } from '../../config/navigator';
 import {backtoonboard} from '../../modules/common/actions'
-import {setAnonymous} from '../../modules/auth/actions'
+import {setAnonymous,setAnonymousfalse} from '../../modules/auth/actions'
 import {isGettingStartSelector} from '../../modules/common/selectors';
 
 
@@ -18,12 +18,13 @@ const AuthScreen = (props) => {
 
     const handlebacktoonboard = () =>{
         props.backtoonboard()
+        // props.setAnonymousfalse()
     }
 
     console.log( 'props at authscreen',props)
 
     const handleAnonymoususer = () => {
-        console.log('came to anoymous')
+        props.setAnonymous()
     }
     return (
         <View style={styles.container}>
@@ -127,7 +128,8 @@ const styles = StyleSheet.create({
     },
     buttonView: {
         
-       paddingTop:'20%'
+       paddingTop:'20%',
+       zIndex:1
 
     },
     signinbtn: {
@@ -176,7 +178,7 @@ const styles = StyleSheet.create({
         color: color.primary
     },
     footerView: {
-     marginTop:30,
+     marginTop:'10%',
      flexDirection:'row',
      justifyContent:'flex-end',
      alignItems:'flex-end',
@@ -192,4 +194,4 @@ const mapStateToProps = state => {
    
    }
 
-export default connect(mapStateToProps,{ setAnonymous ,backtoonboard })(AuthScreen);
+export default connect(mapStateToProps,{ setAnonymousfalse,setAnonymous ,backtoonboard })(AuthScreen);

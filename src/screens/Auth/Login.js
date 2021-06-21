@@ -9,7 +9,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import NavigationService from '../../utils/navigation'
 import { authStack } from '../../config/navigator';
 import Input from '../../containers/input/Input';
-import { LoginService } from '../../modules/auth/services'
+import { LoginService,LoginwithFacebook } from '../../modules/auth/services'
 import { signin } from '../../modules/auth/actions'
 import { gettingstartcompleted } from '../../modules/common/actions'
 import { connect } from 'react-redux';
@@ -18,12 +18,14 @@ import { LoginButton, AccessToken ,LoginManager } from 'react-native-fbsdk';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 
+
 class LoginScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             email: '',
+
             password: '',
             emailError: '',
             passwordError: '',
@@ -42,6 +44,18 @@ class LoginScreen extends Component {
             password
         } = this.state;
 
+        
+
+        if (!email == '') {
+            if (!password == '') {
+                this.validate(email);
+                this.validatepass(password)
+
+                if (this.state.Password || this.state.Email) {
+                    this.setState({loading: true})
+                    const Email = this.state.Email;
+                    const Password = this.state.Password;
+                    
         this.setState({ loading: true })
         console.log('login started')
         const login = await LoginService({ email, password })
@@ -59,7 +73,58 @@ class LoginScreen extends Component {
         }
 
 
+                }
+                //    console.log(this.state.Email)
 
+
+
+            } else {
+                console.log('blah')
+                this.setState({ passwordError: '* Enter password' })
+
+            }
+
+        } else {
+            this.setState({ emailError: '* Enter email' })
+            console.log('empty email')
+        } 
+
+
+
+
+
+
+    }
+
+    validatepass = (value) => {
+        const { passwordError, emptyPassword } = this.state;
+        if (value.length < 5) {
+            this.setState({ passwordError: '* should be more than 5 charecters' })
+        }
+        else {
+            this.setState({ Password: value });
+            this.setState({ passwordError: '' })
+        }
+
+
+    }
+
+    validate = (text) => {
+        // console.log(text);
+        const { emailError } = this.state;
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+        if (reg.test(text) === false) {
+            this.setState({ emailError: '* invalid Email' })
+            console.log('invalidd email')
+            return false;
+        }
+        else {
+            this.setState({ Email: text })
+            this.setState({ emailError: '' })
+            this.setState({ emptyEmail: '' })
+
+        }
     }
 
     handlegoogle = () => {
@@ -71,6 +136,9 @@ class LoginScreen extends Component {
     //     const response = LoginwithFacebook();
     // }
 
+    handlefacebooklogin = async () =>{
+        const facebookuser = await LoginwithFacebook();
+    }
 
 
     render() {
@@ -111,6 +179,11 @@ class LoginScreen extends Component {
                                 <View style={styles.email}>
                                     <View style={styles.emailView}>
                                         <Text style={styles.emailtxt}>Email</Text>
+                                        {
+                                            this.state.emailError != '' ? (
+                                                <Text style={{marginLeft:10,color:'red'}}>{this.state.emailError}</Text>
+                                            ):null
+                                        }
 
                                     </View>
 
@@ -136,6 +209,11 @@ class LoginScreen extends Component {
                                 <View style={{ marginTop: 10 }}>
                                     <View style={styles.emailView}>
                                         <Text style={styles.emailtxt}>Password</Text>
+                                        {
+                                            this.state.passwordError != '' ? (
+                                                <Text style={{marginLeft:10,color:'red'}}>{this.state.passwordError}</Text>
+                                            ):null
+                                        }
                                     </View>
                                     <Input
                                         placeholder={strings.password}
@@ -170,7 +248,7 @@ class LoginScreen extends Component {
                                                 <Image source={require('../../Assets/auth/google_PNG19635.png')} style={{ height: 40, width: 40 }} />
                                             </TouchableOpacity>
 
-                                            <TouchableOpacity style={styles.socialmediaIconcontainer}>
+                                            <TouchableOpacity onPress={this.handlefacebooklogin} style={styles.socialmediaIconcontainer}>
                                                  <Icon name={'facebook-square'} size={40} color={color.navyblue} />
                                             </TouchableOpacity>
                                           
@@ -285,7 +363,7 @@ const styles = StyleSheet.create({
     },
     footerinfo: {
 
-
+        zIndex:1,
         width: '90%',
         paddingTop: 50,
         marginBottom: 20,
@@ -301,7 +379,8 @@ const styles = StyleSheet.create({
     },
     socialView: {
         width: '90%',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        zIndex:1,
     },
     socialViewinside: {
         
@@ -348,7 +427,9 @@ const styles = StyleSheet.create({
         color: color.primary
     },
     emailView: {
-
+        
+        
+         flexDirection:'row',
         height: 20,
         width: '90%',
         alignSelf: 'center'

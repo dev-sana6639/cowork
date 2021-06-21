@@ -20,7 +20,9 @@ class RegisterScreen extends Component {
         super(props);
         this.state = {
             fullname: '',
+            fullnameError: '',
             phone_numer: '',
+            phoneError: '',
             email: '',
             password: '',
             emailError: '',
@@ -41,23 +43,97 @@ class RegisterScreen extends Component {
             email,
             password,
         } = this.state;
+         
+
+        if (!fullname == '') {
+            console.log('came')
+
+             if (!phone_numer == '') {
+                if (!email == '') {
+                    if (!password == '') {
+                        this.validate(email);
+                        this.validatepass(password)
+
+                        if (this.state.Password || this.state.Email) {
+                            this.setState({ loading: true })
+                            const Email = this.state.Email;
+                            const Password = this.state.Password;
+                            console.log('everyhing is good')
+                            this.setState({ loading: true })
+                            console.log('register started')
+                            const register = await RegisterService({ fullname, phone_numer, email, password })
+                            console.log('register done result is:', register)
+                            if (register.error) {
+                                this.setState({ invalidecred: register.error })
+                                this.setState({ loading: false })
+                                console.log('error is', register.error)
+                            } else {
+
+                                this.props.signup(register)
+                                console.log('register successfully')
+                                this.setState({ loading: false })
+                            }
 
 
-        this.setState({ loading: true })
-        console.log('register started')
-        const register = await RegisterService({ fullname, phone_numer, email, password })
-        console.log('register done result is:', register)
-        if (register.error) {
-            this.setState({ invalidecred: register.error })
-            this.setState({ loading: false })
-            console.log('error is', register.error)
+                        }
+                        //    console.log(this.state.Email)
+
+
+
+                    } else {
+                        console.log('blah')
+                        this.setState({ passwordError: '* Enter password' })
+
+                    }
+
+
+                } else {
+                   this.setState({ emailError: '* Enter email' })
+                }
+            } else {
+                
+                this.setState({ phoneError: '* enter a phone' })
+                
+            }
+
+
         } else {
+            this.setState({ fullnameError: '* enter name' })
+            console.log('enter full name')
+        }
+           
+        
+    }
 
-            this.props.signup(register)
-            console.log('register successfully')
-            this.setState({ loading: false })
+    validatepass = (value) => {
+        const { passwordError, emptyPassword } = this.state;
+        if (value.length < 5) {
+            this.setState({ passwordError: '* should be more than 5 charecters' })
+        }
+        else {
+            this.setState({ Password: value });
+            this.setState({ passwordError: '' })
         }
 
+
+    }
+
+    validate = (text) => {
+        // console.log(text);
+        const { emailError } = this.state;
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+        if (reg.test(text) === false) {
+            this.setState({ emailError: '* invalid Email' })
+            console.log('invalidd email')
+            return false;
+        }
+        else {
+            this.setState({ Email: text })
+            this.setState({ emailError: '' })
+            this.setState({ emptyEmail: '' })
+
+        }
     }
 
     render() {
@@ -99,6 +175,11 @@ class RegisterScreen extends Component {
                                 <View style={styles.email}>
                                     <View style={styles.emailView}>
                                         <Text style={styles.emailtxt}>{strings.fullname}</Text>
+                                        {
+                                            !this.state.fullnameError == '' ? (
+                                                <Text style={{ marginLeft: 10, color: 'red' }}>{this.state.fullnameError}</Text>
+                                            ) : null
+                                        }
                                     </View>
 
                                     <TextInput
@@ -117,6 +198,11 @@ class RegisterScreen extends Component {
                                 <View style={styles.email}>
                                     <View style={styles.emailView}>
                                         <Text style={styles.emailtxt}>{strings.Mobile_Number}</Text>
+                                        {
+                                            !this.state.phoneError == '' ? (
+                                                <Text style={{ marginLeft: 10, color: 'red' }}>{this.state.phoneError}</Text>
+                                            ) : null
+                                        }
                                     </View>
 
                                     <TextInput
@@ -139,6 +225,11 @@ class RegisterScreen extends Component {
                                 <View style={styles.email}>
                                     <View style={styles.emailView}>
                                         <Text style={styles.emailtxt}>Email</Text>
+                                        {
+                                            !this.state.emailError == '' ? (
+                                                <Text style={{ marginLeft: 10, color: 'red' }}>{this.state.emailError}</Text>
+                                            ) : null
+                                        }
                                     </View>
 
                                     <TextInput
@@ -156,6 +247,11 @@ class RegisterScreen extends Component {
                                 <View style={styles.email}>
                                     <View style={styles.emailView}>
                                         <Text style={styles.emailtxt}>Password</Text>
+                                        {
+                                            !this.state.passwordError == '' ? (
+                                                <Text style={{ marginLeft: 10, color: 'red' }}>{this.state.passwordError}</Text>
+                                            ) : null
+                                        }
                                     </View>
                                     <TextInput
                                         style={styles.inputtext}
@@ -253,7 +349,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     logoView: {
-       
+
     },
     keyboard: {
         flex: 1
@@ -292,7 +388,7 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     bodyViewScroll: {
-        
+
 
     },
     footerinfo: {
@@ -304,15 +400,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     footerView: {
-     
-     height:200,
+
+        height: 200,
         alignItems: 'center',
-     
+
 
     },
     socialView: {
-  
-       marginTop:'10%',
+
+        marginTop: '10%',
         width: '100%',
 
     },
@@ -348,7 +444,7 @@ const styles = StyleSheet.create({
         color: color.primary
     },
     emailView: {
-
+        flexDirection: 'row',
         height: 20,
         width: '90%',
 
@@ -365,13 +461,13 @@ const styles = StyleSheet.create({
 
     },
     headerView: {
-        
+
         marginTop: 44,
         height: '7%',
     },
     bodyView: {
 
-       
+
 
 
     },

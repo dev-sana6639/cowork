@@ -34,3 +34,9 @@ export function setAnonymous() {
         type: Actions.SETANONYMOUS_START
     }
 }
+
+export function setAnonymousfalse(){
+    return{
+        type: Actions.SETANONYMOUSFALSE_START
+    }
+}

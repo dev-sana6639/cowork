@@ -6,13 +6,13 @@ import { logout } from '../../modules/auth/actions';
 import * as strings from '../../utils/strings';
 import * as color from '../../utils/colors';
 import LinearGradient from 'react-native-linear-gradient';
-import { gettopratedspaces, recentviewspaces, getbrowsebylocality,Blogstosupportyou } from '../../modules/common/service'
+import { gettopratedspaces, recentviewspaces, getbrowsebylocality, Blogstosupportyou } from '../../modules/common/service'
 
 const HomeScreen = (props) => {
     const [topratedspaces, setTopratedspaces] = useState('');
     const [recentviewedspaces, setRecentViewspaces] = useState('');
     const [browsebylocality, setBrowsebylocality] = useState('');
-    const [blogs,setblogs] = useState('');
+    const [blogs, setblogs] = useState('');
 
     useEffect(async () => {
         const toprated = await gettopratedspaces();
@@ -26,22 +26,21 @@ const HomeScreen = (props) => {
 
         const Blogs = await Blogstosupportyou();
         setblogs(Blogs)
-    
+
     });
 
     const onPressLearnMore = () => {
         props.logout();
-    
+
 
     }
 
-    const {
-        name
-    } = props.user;
+
 
     // console.log('top rated are', topratedspaces)
 
     const ItemSeprator = () => <View style={{ width: 10 }} />
+    const blogItemSeprator = () => <View style={{ width: '100%', height: 5 }} />
 
     const renderTopRatedSpaces = (item) => {
 
@@ -55,7 +54,7 @@ const HomeScreen = (props) => {
             <View style={styles.topratedspacemainContainer}>
 
                 <View style={styles.ImageContainer}>
-                    <Image source={require('../../Assets/homescreenicons/topratedummydata/6c87b3c8da23896328110552404391f5.png')} style={{ width: 280, borderRadius: 10 }} />
+                    <Image source={require('../../Assets/homescreenicons/topratedummydata/6c87b3c8da23896328110552404391f5.png')} style={{ width: 290, borderRadius: 10 }} />
                 </View>
 
                 <View style={styles.infoContainer}>
@@ -70,12 +69,12 @@ const HomeScreen = (props) => {
                         </View>
                     </View>
 
-                    <View style={styles.inforow1}>
+                    <View style={styles.inforow2}>
                         <View>
                             <Text style={styles.spacelocationtxt}>{location}</Text>
                         </View>
 
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', paddingRight: 12 }}>
                             <View style={styles.ratingContainer}>
                                 <Text style={styles.ratingtxt}>{rating}</Text>
                             </View>
@@ -112,7 +111,7 @@ const HomeScreen = (props) => {
             <View style={styles.recentViewedspacemainContainer}>
 
                 <View style={styles.ImageContainer}>
-                    <Image source={require('../../Assets/homescreenicons/topratedummydata/collab.png')} style={{ width: 280, borderRadius: 10 }} />
+                    <Image source={require('../../Assets/homescreenicons/topratedummydata/collab.png')} style={{ width: 290, borderRadius: 10 }} />
                 </View>
 
                 <View style={styles.recentviwedinfoContainer}>
@@ -127,12 +126,12 @@ const HomeScreen = (props) => {
                         </View>
                     </View>
 
-                    <View style={styles.inforow1}>
+                    <View style={styles.inforow2}>
                         <View>
                             <Text style={styles.spacelocationtxt}>{location}</Text>
                         </View>
 
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', paddingRight: 12 }}>
                             <View style={styles.ratingContainer}>
                                 <Text style={styles.ratingtxt}>{rating}</Text>
                             </View>
@@ -160,37 +159,47 @@ const HomeScreen = (props) => {
 
         return (
             <View style={styles.browsebylocalitycontainer}>
-                <ImageBackground imageStyle={{ borderRadius: 10}} source={require('../../Assets/homescreenicons/topratedummydata/browsebylocality.png')} style={styles.image}>
-                  
-                        <Text style={styles.browsebylocalitytext}>{area}</Text>
-                        
+                <ImageBackground imageStyle={{ borderRadius: 10 }} source={require('../../Assets/homescreenicons/topratedummydata/browsebylocality.png')} style={styles.image}>
+
+                    <Text style={styles.browsebylocalitytext}>{area}</Text>
+
                 </ImageBackground>
-                </View>
-            
+            </View>
+
         )
     }
 
-    // const renderblogs = (item) =>{
-    //     console.log('proppppp,'.item)
-    //     return(
-    //         <View style={styles.blogstosupportyouContainer}>
-    //          <View>
-    //              <Image source={require('../../Assets/homescreenicons/topratedummydata/blogs.png')} />
-    //          </View>
-    //          <View> 
-    //                 <View>
-    //                   {}
-    //                 </View>
-    //                 <View>
+    const renderblogs = ({ item }) => {
+        console.log('blogs are', item)
 
-    //                 </View>
+        return (
+            <View style={styles.blogstosupportyouContainer}>
+                <View style={{ width: '40%' }}>
+                    <Image source={require('../../Assets/homescreenicons/topratedummydata/blogs.png')}
+                        style={{ width: 120, height: 70 }}
+                    />
+                </View>
+                <View style={styles.bloginfoContainer}>
+                    <View>
+                        <Text style={styles.blogheadlinetxt}>{item.headline}</Text>
+                    </View>
+                    <View style={styles.blogdateContainer}>
+                        <View>
+                            <Image source={require('../../Assets/homescreenicons/clockicon.png')} />
+                        </View>
+                        <View style={{ marginLeft: 5 }}>
+                            <Text style={styles.datetxt}>{item.time}</Text>
+                        </View>
+                    </View>
 
-    //          </View>
-    //         </View>
-    //     )
-    // }
+                </View>
+            </View>
+        )
+    }
 
-    
+
+
+
 
 
     return (
@@ -218,7 +227,15 @@ const HomeScreen = (props) => {
 
                 <View style={styles.welcomcontainer}>
                     <View style={styles.welcomDiv}>
-                        <Text style={styles.welcomtxt}>Welcom  {name}</Text>
+                        {props.user == undefined ? (
+                            <Text style={styles.welcomtxt}>Welcom </Text>
+
+                        )
+                            : (
+                                <Text style={styles.welcomtxt}>Welcom  {props.user.name}</Text>
+
+                            )
+                        }
                     </View>
 
                     <View style={styles.imagediv}>
@@ -448,48 +465,101 @@ const HomeScreen = (props) => {
 
                 </View>
 
-                {/* <View>
+                <View style={styles.blogsflatlist}>
 
-                <FlatList
-                            data={blogs}
-                            renderItem={renderblogs}
-                            keyExtractor={item => item.id}
-                           
-                            // ItemSeparatorComponent={ItemSeprator}
-                        />
+                    <View style={styles.ourblogsContainer}>
+                        <View style={styles.Top_Rated_Spaces_NearbytxtContainer}>
+                            <Text style={styles.Top_Rated_Spaces_Nearbytxt}>{strings.Our_Blogs_to_Support_You}</Text>
+                        </View>
+                        <View style={styles.viewallContaner}>
+                            <TouchableOpacity>
+                                <Text style={styles.viewalltxt}>View all</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
 
-                </View> */}
+                    <FlatList
+                        data={blogs}
+                        renderItem={renderblogs}
+                        keyExtractor={item => item.id}
+                        horizontal={false}
+                        ItemSeparatorComponent={blogItemSeprator}
+                    />
+
+                </View>
+
+                <View style={{
+                    height:100,
+                }} />
             </ScrollView>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    blogstosupportyouContainer:{
-      flexDirection:'row'
+    datetxt: {
+        color: 'black',
+
+        fontFamily: 'Roboto-Regular',
     },
-    browsebylocalitytext:{
-      
-            color: color.full_white,
-            fontSize: 42,
-            textAlign: "center",
-            fontFamily: 'Roboto-Regular',
-            fontSize: 24,
-      
-          
+    blogheadlinetxt: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontFamily: 'Roboto-Regular',
+        fontSize: 12,
     },
-    browsebylocalitycontainer:{
-        height:200,
-        width:260,
-        borderRadius:20
+    blogdateContainer: {
+        flexDirection: 'row'
+    },
+    bloginfoContainer: {
+
+        width: '55%',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: 2,
+        marginLeft: 5
+
+    },
+    ourblogsContainer: {
+
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10
+    },
+    blogsflatlist: {
+        marginTop: 30,
+        alignSelf: 'center',
+        width: '90%'
+    },
+    blogstosupportyouContainer: {
+        padding:7,
+        flexDirection: 'row',
+        width: '100%',
+        elevation:2
+
+    },
+    browsebylocalitytext: {
+
+        color: color.full_white,
+        fontSize: 42,
+        textAlign: "center",
+        fontFamily: 'Roboto-Regular',
+        fontSize: 24,
+
+
+    },
+    browsebylocalitycontainer: {
+        height: 200,
+        width: 260,
+        borderRadius: 20
     },
     image: {
         flex: 1,
         resizeMode: "cover",
         justifyContent: "center",
-       borderWidth:1,
-       borderRadius:15
-      },
+        borderWidth: 1,
+        borderRadius: 15
+    },
     recentViewedspacemainContainer: {
         borderRadius: 10,
         backgroundColor: color.blue
@@ -522,7 +592,10 @@ const styles = StyleSheet.create({
     },
     priceContainer: {
 
-        flexDirection: 'row'
+        flexDirection: 'row',
+
+        paddingRight: 10
+
     },
     pricetxt: {
 
@@ -546,13 +619,20 @@ const styles = StyleSheet.create({
     },
     spacenameContainer: {
 
-        paddingLeft: 3
+        paddingLeft: 10
     },
     inforow1: {
 
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 5
+        marginTop: 5,
+
+    },
+    inforow2: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 5,
+        marginBottom: 5,
     },
     infoContainer: {
         backgroundColor: color.primary,
@@ -600,7 +680,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
 
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginBottom: 10
     },
     topratedspacesnearbyContainer: {
 
@@ -752,7 +833,7 @@ const styles = StyleSheet.create({
 
     },
     container: {
-
+        backgroundColor:color.white,
         height: '100%',
         width: '100%',
         flex: 1,

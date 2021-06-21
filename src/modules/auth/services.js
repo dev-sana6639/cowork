@@ -1,4 +1,5 @@
 import queryString from 'qs';
+import { LoginManager } from "react-native-fbsdk";
 // // Handle the button press
 // export const signInWithPhoneNumber = async (phoneNumber) => {
     
@@ -9,6 +10,29 @@ import queryString from 'qs';
 //     console.log('after number')
 //    return confirmation;
 //   }
+
+              // facebook login
+              export const LoginwithFacebook = async () =>{
+
+               
+                
+             const facebookresponse =    LoginManager.logInWithPermissions(["public_profile"]).then(
+                  function(result) {
+                    if (result.isCancelled) {
+                      return result.isCancelled
+                    } else {
+                      
+                        return  result.grantedPermissions.toString()
+                     
+                    }
+                  },
+                  function(error) {
+                   return error
+                  }
+                );
+
+            }
+              // facebook login ends
 
 
 export const RegisterService = async (props) => {

@@ -73,6 +73,12 @@ export default function authReducer( state = initialState, action) {
                 isAnonymous: true
 
             }
+        
+       case Actions.SETANONYMOUSFALSE_COMPLETE:
+           return {
+               ...state,
+               isAnonymous: false
+           }
       
 
         default:

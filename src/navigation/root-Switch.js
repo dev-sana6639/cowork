@@ -42,12 +42,13 @@ console.log('is Anonymous ',isAnonymous)
             {
                 isGettingStart == true ? (
                     <Stack.Screen name={onboardStack.onboard} component={OnboardStack} />
-                ) : isLogin == false || isLogin == undefined && isAnonymous == undefined || isAnonymous == false ? (
-                    <Stack.Screen name={rootSwitch.auth} component={AuthStack} />  
+                ) : isAnonymous != undefined || isLogin == true ? (
+                    <Stack.Screen name={rootSwitch.main} component={MainStack} />
+                     
                    
                 ) :
                 (
-                    <Stack.Screen name={rootSwitch.main} component={MainStack} />     
+                    <Stack.Screen name={rootSwitch.auth} component={AuthStack} />      
                 )
 
                                                         

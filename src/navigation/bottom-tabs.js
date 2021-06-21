@@ -16,7 +16,8 @@ function BottomTabs() {
     <Tab.Navigator>
       <Tab.Screen 
        options={{
-        tabBarLabel: 'Settings',
+        tabBarLabel: 'Home',
+      
         tabBarIcon: ({focused, color, size}) => (
           <Image
             source={
@@ -31,11 +32,16 @@ function BottomTabs() {
             }}
           />
         ),
+
+        tabBarOptions: { 
+          activeTintColor: 'red',
+          inactiveTintColor: '#fff',
+  },
       }}
         name={mainStack.home}  component={Home} />
     <Tab.Screen
       options={{
-        tabBarLabel: 'Settings',
+        tabBarLabel: 'Book',
         tabBarIcon: ({focused, color, size}) => (
           <Image
             source={
@@ -54,7 +60,7 @@ function BottomTabs() {
     name={mainStack.book} component={BookingScreen} />
       <Tab.Screen
        options={{
-        tabBarLabel: 'Settings',
+        tabBarLabel: 'Chat',
         tabBarIcon: ({focused, color, size}) => (
           <Image
             source={
@@ -74,7 +80,7 @@ function BottomTabs() {
       name={mainStack.chat} component={ChatScreen} />
       <Tab.Screen
         options={{
-            tabBarLabel: 'Settings',
+            tabBarLabel: 'Profile',
             tabBarIcon: ({focused, color, size}) => (
               <Image
                 source={

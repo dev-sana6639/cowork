@@ -90,17 +90,17 @@ export const blogstosuppoertyou = [
     },
     {  
         id:2,
-       area:'Best cyber security tip to keep your device secure by workbuddy',
+        headline:'Best cyber security tip to keep your device secure by workbuddy',
        time:'May 27, 2021'
     },
     {  
         id:3,
-       area:'5 Tips for creating a productive home office by workbuddy',
+        headline:'5 Tips for creating a productive home office by workbuddy',
        time:'May 27, 2021'
     },
     {
         id:4,
-        area:'9 Must do’s for business professionals tips by workbuddy',
+        headline:'9 Must do’s for business professionals tips by workbuddy',
         time:'May 27, 2021'
     },
 ]
@@ -124,27 +124,3 @@ export const  gettopratedspaces = async () =>{
 
 import {AndroidFaceBookAppID} from '../../config/constants';
 
-export const LoginwithFacebook = async () =>{
-
-    console.log('came to login service')
-    console.log('facebook id is',AndroidFaceBookAppID)
-    
-    try{
-        const {token, type} = await Facebook.logInWithReadPermissionsAsync(
-            AndroidFaceBookAppID,
-            {
-                permissions: "'public_profile",
-            }
-        );
-
-        console.log('token from facebook is:',token)
-
-        // getting all user data from FB API
-        // const response = await fetch(
-
-        // )
-
-    } catch(e){
-        console.log('Error while connecting to facebook')
-    }
-}
